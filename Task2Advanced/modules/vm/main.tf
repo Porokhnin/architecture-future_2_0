@@ -1,30 +1,35 @@
-terraform {
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-  required_version = ">= 0.13"
-
-  backend "s3" {
-    endpoints = {
-      s3 = "https://storage.yandexcloud.net"
-    }
-    region = "ru-central1"
-    bucket = "loa"
-    key    = "terraform.tfstate"
-
-    skip_region_validation      = true
-    skip_credentials_validation = true
-    skip_requesting_account_id  = true
-    skip_s3_checksum            = true
-    skip_s3_api_negotiation     = true
-  }
+data "yandex_compute_image" "ubuntu" {
+  family = "ubuntu-2204-lts"
 }
 
-provider "yandex" {
-  token = var.provider_token
-  cloud_id = var.provider_cloud_id
-  folder_id = var.provider_folder_id
-  zone = "ru-central1-a"
+resource "yandex_compute_disk" "this" {
+  name     = "vm-disk"
+  type     = "network-ssd"
+  zone     = "ru-central1-a"
+  size     = var.boot_disk_size
+  image_id = data.yandex_compute_image.ubuntu.image_id
+}
+
+resource "yandex_compute_instance" "this" {
+  name        = "vm-instance"
+  zone        = "ru-central1-a"
+  platform_id = "standard-v3"
+
+  resources {
+    cores  = var.cores
+    memory = var.memory
+  }
+
+  boot_disk {
+    disk_id = yandex_compute_disk.this.id
+  }
+
+  network_interface {
+    subnet_id = var.subnet_id
+    nat       = true
+  }
+
+  metadata = {
+    ssh-keys = "ubuntu:${var.ssh_key}"
+  }
 }

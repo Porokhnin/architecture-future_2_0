@@ -1,22 +1,27 @@
-variable "provider_token" {
-  description = "Токен"
-  type        = string
+variable "cores" {
+  type        = number
+  description = "Количество ядер"
+  default     = 2
 }
 
-variable "provider_cloud_id" {
-  description = "ID облака"
-  type        = string
-  default     = "b1g4uhakpot917op49t4"
+variable "memory" {
+  type        = number
+  description = "Объём RAM (в ГБ)"
+  default     = 2
 }
 
-variable "provider_folder_id" {
-  description = "ID папки"
-  type        = string
-  default     = "b1gpqj4rmksfv6qks5u4"
+variable "boot_disk_size" {
+  type        = number
+  description = "Размер подключаемого диска (в ГБ)"
+  default     = 4
 }
 
-variable "bucket" {
-  description = "Имя бакета"
+variable "subnet_id" {
   type        = string
-  default     = "architecture-future-2.0"
+  description = "Subnet ID"
+}
+
+variable "ssh_key" {
+  type        = string
+  description = "SSH-ключ (содержимое pub-файла)"
 }
