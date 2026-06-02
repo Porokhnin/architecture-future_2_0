@@ -20,7 +20,7 @@ on:
 # В GitHub Actions глобальные переменные объявляются через блок env, а не variables
 env:
   ENV: ${{ github.event.inputs.environment || 'dev' }}
-  TF_ROOT: "envs/${{ github.event.inputs.environment || 'dev' }}"
+  TF_ROOT: "Task2Advanced/envs/${{ github.event.inputs.environment || 'dev' }}"
 
 jobs:
   terraform_plan:
