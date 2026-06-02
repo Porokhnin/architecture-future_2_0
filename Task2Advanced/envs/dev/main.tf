@@ -9,6 +9,9 @@ terraform {
   backend "s3" {}
 }
 
+provider "yandex" {}
+
+
 # Объявляем переменные верхнего уровня (те же, что в модуле)
 variable "cores" { type = number }
 variable "memory" { type = number }
