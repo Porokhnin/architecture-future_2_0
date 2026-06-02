@@ -1,5 +1,5 @@
 endpoints = {
-  s3 = "https://yandexcloud.net"
+  s3 = "https://storage.yandexcloud.net"
 }
 bucket                      = "architecture-future-2.0"
 region                      = "ru-central1"
