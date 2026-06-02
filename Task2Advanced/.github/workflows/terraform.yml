@@ -30,9 +30,9 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
-      YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
-      YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
-      YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+      YC_TOKEN: ${{ secrets.YC_TOKEN }}
+      YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+      YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
 
     steps:
       - name: Checkout Code
@@ -78,9 +78,9 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
-      YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
-      YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
-      YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+      YC_TOKEN: ${{ secrets.YC_TOKEN }}
+      YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+      YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
 
     steps:
       - name: Checkout Code
