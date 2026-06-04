@@ -1,0 +1,50 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'lineColor': '#424242' }}}%%
+graph LR
+    %% Стили для элементов Event Storming
+    classDef command fill:#bbdefb,stroke:#1e88e5,stroke-width:2px,color:#0d47a1;
+    classDef aggregate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#f57f17;
+    classDef event fill:#ffe0b2,stroke:#f57c00,stroke-width:2px,color:#e65100;
+    classDef system fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#01579b;
+
+    %% --- ПРОЦЕСС 1: ПАЦИЕНТСКИЙ ПОТОК И МЕДИЦИНСКИЙ ТРЕК ---
+    subgraph Track1 [Медицинский трек — Домен: MedicalCore]
+        C1[Команда: Зарегистрировать карту]:::command --> A1[Агрегат: PatientProfile]:::aggregate
+        A1 --> E1([Событие: Зарегистрирован новый пациент]):::event
+        
+        C2[Команда: Загрузить снимок КТ/МРТ]:::command --> A2[Агрегат: DiagnosticStudy]:::aggregate
+        A2 --> E2([Событие: Загружены результаты исследования]):::event
+    end
+
+    %% --- ПРОЦЕСС 2: ИИ-ДИАГНОСТИКА ---
+    subgraph Track2 [Контур ИИ — Домен: MedAI]
+        E2 -->|Реактивный триггер| C3[Команда: Запустить инференс]:::command
+        C3 --> A3[Агрегат: AIInference]:::aggregate
+        A3 --> E3([Событие: Пройдено исследование ИИ]):::event
+    end
+
+    %% Возврат результатов из ИИ обратно врачу
+    E3 -->|Обновление АРМ врача| A2
+
+    %% --- ПРОЦЕСС 3: БИЛЛИНГ И ФИНТЕХ ---
+    subgraph Track3 [Финтех контур — Домен: FintechCore]
+        C4[Команда: Рассчитать визит]:::command --> A4[Агрегат: Invoice]:::aggregate
+        A4 --> E4([Событие: Выставлен счет за услуги]):::event
+        
+        E4 -->|Реактивный триггер скоринга| C5[Команда: Оформить рассрочку]:::command
+        C5 --> A5[Агрегат: CreditContract]:::aggregate
+        A5 --> E5([Событие: Создан кредитный договор]):::event
+        E5 --> E6([Событие: Проведена транзакция оплаты]):::event
+    end
+
+    %% Смена статуса счета в медицине по факту оплаты
+    E6 -->|Авто-оплата счета| A4
+
+    %% --- ПРОЦЕСС 4: СКВОЗНАЯ АНАЛИТИКА ---
+    subgraph Track4 [Аналитический контур — Домен: GlobalAnalytics]
+        S_DWH[Контейнер: ClickHouse OLAP]:::system
+    end
+
+    %% Подписки аналитики (Стриминг Near-Real-Time)
+    E1 & E3 & E4 & E5 & E6 -.->|Near-Real-Time подписка| S_DWH
+
+    click A1 href "#" "PatientProfile Aggregate"
